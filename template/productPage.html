@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+
+{% block title %}Product{% endblock title %}
+
+{% block head %}<div></div>{% endblock head %}
+
+{% block body %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+{% for product in products %}
+<main>
+    <div class="container">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show mt-5" role="alert">
+          <strong>{{ message }}</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <div class="row">
+            <div class="col-6 column">
+                <div class="card bg-white my-3 mx-5 productImage">
+                    <img class="" src="static/{{product.Img}}" alt="notFound">
+                </div>
+            </div>
+
+
+            <div class="col-6 mt-4 column">
+                <h1>{{product.Name}}</h1>
+                <h6 class="text-secondary">by {{product.owner}}</h6>
+
+                {% for i in rating %}
+                    <span class="fa fa-star checked"></span>
+                {% endfor %}
+
+                
+
+                <h3 class="mt-4">${{product.price}}</h3>
+                <h6 class="mt-1 text-muted"><s>${{MRP}}</s></h6>
+
+                <h5 class="about mt-4">About {{product.Name}}</h5>
+                <hr>
+                <h6 class="desc">
+                    {{product.desc}}
+                </h6>
+
+                <button type="button" class="btn btn-primary buy my-5">Buy Now</button>
+                <button type="button" class="btn btn-white addCart mx-3">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var addCartButton = document.querySelector(".addCart")
+        var buyNow = document.querySelector('.buy')
+        buyNow.addEventListener('click', () => {
+            window.location.href = '/address?productId={{product.id}}&productName={{product.Name}}'
+        })
+        addCartButton.addEventListener('click', () => {
+            window.location.href = '/addToCart?productName={{product.Name}}&productId={{product.id}}'
+        })
+    </script>
+
+
+    <div class="container">
+       
+        <h1 class="mx-5">More like {{product.Name}}</h1>
+        <div class="row main d-flex flex-wrap justify-content-around">
+
+            {% for product in allProducts %}
+            <div class="col-3 suggestion">
+                <a href="/productPage?id={{product.id}}">
+                    <div class="">
+                        <div class="card my-3 mx-5">
+                            <img src="static\{{product.Img}}" alt="">
+                            <h5 class="mt-4">{{product.Name}}</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+            
+        </div>
+</main>
+
+<script>
+    var col = document.getElementsByClassName('column')
+    var sugCol = document.getElementsByClassName('suggestion')
+    var ScreenSize = window.matchMedia("(max-width: 1000px)")
+    
+    function changeView(size){
+        if(size.matches){
+            for (var i = 0; i < col.length; i++) {
+                col[i].classList.remove('col-6')
+                col[i].classList.add('col-12')
+                col[i].classList.add('mx-3')
+            }
+        }
+        else{
+            for (var i = 0; i < col.length; i++) {
+                col[i].classList.remove('col-12')
+                col[i].classList.remove('mx-3')
+                col[i].classList.add('col-6')
+            }
+        }
+    }
+
+    function changeSuggView(size){
+        if(size.matches){
+            for (var i = 0; i < sugCol.length; i++) {
+                sugCol[i].classList.remove('col-3')
+                sugCol[i].classList.add('col-6')
+            }
+        }
+        else{
+            for (var i = 0; i < sugCol.length; i++) {
+                sugCol[i].classList.remove('col-6')
+                sugCol[i].classList.add('col-3')
+            }
+        }
+    }
+
+    changeSuggView(ScreenSize)
+    changeView(ScreenSize)
+    ScreenSize.addListener(changeView)
+    ScreenSize.addListener(changeSuggView)
+
+</script>
+
+{% endfor %}
+
+<style>
+    .btn-light {
+        color: black;
+    }
+
+    .productImage {
+        padding: 50px;
+        transition: transform .2s;
+        margin: 0 auto;
+        transition: all 1s;
+    }
+
+    .productImage:hover{
+        transform: scale(1.08);
+        cursor: crosshair;
+        transition: all 1s;
+    }
+
+    main {
+        margin-top: 10vh;
+    }
+
+    .checked {
+        color: #1A73E8;
+    }
+
+    .unchecked {
+        color: #5F6368;
+    }
+
+    .desc {
+        font-size: 12px;
+    }
+
+    .about {
+        font-size: 15px;
+    }
+
+    a,
+    a:hover {
+        text-decoration: none;
+        color: black;
+    }
+</style>
+
+{% endblock body %}

@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% block title %}Delivery Address{% endblock title %}
+
+{% block body %}
+
+<div class="container mt-5">
+    <br>
+    <br>
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="AddressList">
+            {% if allAddress %}
+            <h1 class="text-center">Select Delivery Address</h1>
+            {% for address in allAddress %}
+                <div class="form-check border rounded mt-3">
+                    <input class="form-check-input my-4 m-1" type="radio" name="flexRadioDefault" value="{{address.id}}" id="flexRadioDefault1">
+                    <div class="m-4">
+                        <h6>{{address.name}}</h6>
+                        <p>{{address.Address}}, {{address.locality}}, {{address.state}} - {{address.pin}}
+                        {{address.mobileNumber}}</p>
+                    </div>
+              </div>
+            {% endfor %}
+            <button class="btn btn-primary form-control mt-3" onclick="getAddress()">Next</button>
+            {% endif %}
+        </div>
+
+            <div class="card p-3 mt-5 border bg-white addAddressForm addNewForm">
+            
+                <h3 class="text-center px-2 addNewForm">Add Delivery Address</h3>
+                <form method="POST" id="addNewForm">
+                    {% csrf_token %}
+                    <div class="form-group mb-4">
+                        <label for="name">Name</label>
+                        <input type="text" name="name" class="form-control" value="" required>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="mobile">Mobile No.</label>
+                        <input type="text" name="mobile" class="form-control" value="" required>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="address">Address</label>
+                        <div class="d-flex">                            
+                            <input type="text" name="HouseNo" class="form-control mx-1" value="" placeholder="Flat/House No." required>
+                            <input type="text" name="Street" class="form-control mx-1" value="" placeholder="Building/Street" required>
+                            <input type="text" name="Locality" class="form-control mx-1" value="" placeholder="Localilty" required>
+                        </div>
+                        <div class="d-flex mt-4">                            
+                            <input type="text" name="State" class="form-control mx-1" value="" placeholder="State" required>
+                            <input type="text" name="Zip" class="form-control mx-1" value="" placeholder="Zip Code" required>
+                        </div>
+                        <label for="Address Type" class="mt-4">Address of</label>
+                        <div class="d-flex">
+                            <select class="form-select" name="Address_Type" id="" required>
+                                <option value="home">Home</option>
+                                <option value="word">Work</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary form-control mx-3">Next</button>
+                </div>
+                </form>
+                <h6 class="text-center mx-4 savedAddressbutton">Use Saved Address</h6>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-6 offset-md-3 addNew">
+                <div class="card p-3 mt-5 border bg-white">
+                    <div class="text-center">
+                        <span class="material-icons text-center">add</span>
+                        <h6 class="text-center">Add New Address</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <br>
+    <br>
+</div>  
+
+<script>
+    function getAddress(){
+        var selectedAddress;
+        try{
+            selectedAddress = document.querySelector('input[name=flexRadioDefault]:checked').value;
+            if(selectedAddress){
+                {% if cart == True %}
+                    window.location.replace(`/buy?address=${selectedAddress}&cart={{cart}}`)
+
+                {% endif %}
+                window.location.replace(`/buy?address=${selectedAddress}&productId={{productId}}&productName={{productName}}&cart={{cart}}`)
+            }
+        }
+        catch{
+            alert('Select an Address')
+        }
+        
+        
+    }
+    var addNewForm = document.querySelector('.addNewForm')
+    var savedAddButton = document.querySelector('.savedAddressbutton')
+    addNewForm.style.display = 'none'
+    savedAddButton.style.display = 'none'
+    function addNewAddress(){
+        var addNewBlock = document.querySelector('.addNew')
+        var addressList = document.querySelector('.AddressList')
+        var savedAddButton = document.querySelector('.savedAddressbutton')
+        addNewForm.style.display = 'block'
+        savedAddButton.style.display = 'block'
+        addNewBlock.style.display = 'none'
+        addressList.style.display = 'none'
+    }
+
+    function useOldAddress(){
+        var addNewBlock = document.querySelector('.addNew')
+        var addressList = document.querySelector('.AddressList')
+        var savedAddButton = document.querySelector('.savedAddressbutton')
+        addNewForm.style.display = 'none'
+        savedAddButton.style.display = 'none'
+        addNewBlock.style.display = 'block'
+        addressList.style.display = 'block'
+    }
+
+    savedAddButton.addEventListener('click', () => {
+        useOldAddress()
+    })
+
+    document.querySelector('.addNew').addEventListener('click', () => {
+        addNewAddress()
+    })
+</script>
+
+<style>
+    .addNew:hover{
+        border-color: #1A73E8;
+        color: #1A73E8;
+        cursor: pointer;
+    }
+
+    .savedAddressbutton:hover{
+        color: #1A73E8;
+        cursor: pointer;
+    }
+</style>
+
+{% endblock body %}

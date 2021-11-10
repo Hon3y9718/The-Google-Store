@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <div class="container mt-5">
+        <center>
+            <img src="static/bought.png" class="mt-5" alt="notFound">
+            <h1 class="mt-5">Product Booked!</h1>
+            <a href='/' class="btn btn-primary shopMore my-5">Shop More</a>
+        </center>
+    </div>
+    <script>
+        var shopMore = document.querySelector('shopMore')
+        {% comment %} setInterval(() => {
+            window.location.replace('/')
+        }, 10000) {% endcomment %}
+    </script>
+{% endblock body %}
