@@ -32,11 +32,12 @@ def CartPage(request):
     userId = request.user.id
     cartItems = CartData.objects.filter(userId=userId)
     listOfProducts = []
+    totalAmount = 0
     if cartItems.count() < 1:
         messages.error(request, "Your cart is Empty!")
     else:
         allProducts = ProductData.objects.all()
-        totalAmount = 0
+        
         for i in range(0,cartItems.count()):
             product = allProducts.filter(id=cartItems[i].productId)
             listOfProducts.append({

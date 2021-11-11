@@ -3,5 +3,6 @@ from django.urls import include, path
 from adminApp import views
 
 urlpatterns = [
-    path('adminApp/sudo/login', views.adminLogin, name='Admin Home')
+    path('adminApp/sudo/login', views.adminLogin, name='Admin Home'),
+    path("adminApp", views.home, name="Home")
 ]

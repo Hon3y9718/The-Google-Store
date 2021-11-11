@@ -6,3 +6,6 @@ def adminLogin(request):
         'Name': request.user
     }
     return render(request, 'adminAppTemplate/base.html', vars)
+
+def home(request):
+    return render(request, "adminAppTemplate/home.html")
